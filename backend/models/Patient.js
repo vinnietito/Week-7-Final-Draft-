@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 class Patient {
     static async create(data) {
         const hashedPassword = await bcrypt.hash(data.password, 10);
-        const query = 'INSERT INTO patients (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
-        return db.promise().query(query, [data.first_name, data.last_name, data.email, hashedPassword]);
+        const query = 'INSERT INTO patients (first_name, last_name, email, password, phone, date_of_birth, gender, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        return db.promise().query(query, [data.first_name, data.last_name, data.email, hashedPassword, data.phone, data.date_of_birth, data.gender, data.address]);
     }
 
     static async findByEmail(email) {
@@ -21,8 +21,8 @@ class Patient {
     }
 
     static async update(id, data) {
-        const query = 'UPDATE patients SET first_name = ?, last_name = ? WHERE id = ?';
-        return db.promise().query(query, [data.first_name, data.last_name, id]);
+        const query = 'UPDATE patients SET first_name = ?, last_name = ?, phone = ?, date_of_birth = ?, gender = ?, address = ? WHERE id = ?';
+        return db.promise().query(query, [data.first_name, data.last_name, data.phone, data.date_of_birth, data.gender, data.address, id]);
     }
 
     static async delete(id) {

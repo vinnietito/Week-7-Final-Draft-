@@ -1,15 +1,17 @@
 const db = require('../config/db');
+const bcrypt = require('bcrypt');
 
 class Doctor {
     static async create(data) {
-        const query = 'INSERT INTO doctors (name, specialization, availability, phone) VALUES (?, ?, ?, ?)';
-        return db.promise().query(query, [data.name, data.specialization, data.availability, data.phone]);
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const query = 'INSERT INTO doctors (first_name, last_name, email, password, specialization, phone) VALUES (?, ?, ?, ?, ?, ?)';
+        return db.promise().query(query, [data.first_name, data.last_name, data.email, hashedPassword, data.specialization, data.phone]);
     }
 
-    static async findAll() {
-        const query = 'SELECT * FROM doctors';
-        const [rows] = await db.promise().query(query);
-        return rows;
+    static async findByEmail(email) {
+        const query = 'SELECT * FROM doctors WHERE email = ?';
+        const [rows] = await db.promise().query(query, [email]);
+        return rows[0]; // Return the first matching row
     }
 
     static async findById(id) {
@@ -19,8 +21,8 @@ class Doctor {
     }
 
     static async update(id, data) {
-        const query = 'UPDATE doctors SET name = ?, specialization = ?, availability = ?, phone = ? WHERE id = ?';
-        return db.promise().query(query, [data.name, data.specialization, data.availability, data.phone, id]);
+        const query = 'UPDATE doctors SET first_name = ?, last_name = ?, specialization = ?, phone = ? WHERE id = ?';
+        return db.promise().query(query, [data.first_name, data.last_name, data.specialization, data.phone, id]);
     }
 
     static async delete(id) {
