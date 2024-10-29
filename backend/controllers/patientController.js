@@ -2,6 +2,7 @@ const Patient = require('../models/Patient');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const db = require('../config/db');
 
 dotenv.config();
 
