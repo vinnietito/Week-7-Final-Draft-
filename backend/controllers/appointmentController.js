@@ -1,44 +1,59 @@
 const Appointment = require('../models/Appointment');
 
-// Book an appointment
-exports.bookAppointment = async (req, res) => {
+// Create a new appointment
+exports.createAppointment = async (req, res) => {
   try {
-    const { patient_id, doctor_id, date, time } = req.body;
-    await Appointment.create({ patient_id, doctor_id, date, time });
-    res.status(201).json({ message: 'Appointment booked successfully' });
+    const { patient_id, doctor_id, appointment_date } = req.body;
+
+    // Create a new appointment
+    await Appointment.create({ patient_id, doctor_id, appointment_date });
+    res.status(201).json({ message: 'Appointment created successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get appointments by patient
-exports.getAppointmentsByPatient = async (req, res) => {
+// Get all appointments for a specific patient
+exports.getPatientAppointments = async (req, res) => {
   try {
-    const { patient_id } = req.user;
-    const appointments = await Appointment.findByPatient(patient_id);
+    const { id } = req.user; // Assuming the patient's ID is available in the token
+    const appointments = await Appointment.findByPatientId(id);
     res.json(appointments);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get appointments by doctor
-exports.getAppointmentsByDoctor = async (req, res) => {
+// Get all appointments for a specific doctor
+exports.getDoctorAppointments = async (req, res) => {
   try {
-    const { doctor_id } = req.user;
-    const appointments = await Appointment.findByDoctor(doctor_id);
+    const { id } = req.user; // Assuming the doctor's ID is available in the token
+    const appointments = await Appointment.findByDoctorId(id);
     res.json(appointments);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Cancel an appointment
-exports.cancelAppointment = async (req, res) => {
+// Update the status of an appointment
+exports.updateAppointmentStatus = async (req, res) => {
   try {
-    const { id } = req.params;
-    await Appointment.cancel(id);
-    res.json({ message: 'Appointment canceled successfully' });
+    const { id } = req.params; // Appointment ID from the URL
+    const { status } = req.body;
+
+    await Appointment.updateStatus(id, status);
+    res.json({ message: 'Appointment status updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Delete an appointment
+exports.deleteAppointment = async (req, res) => {
+  try {
+    const { id } = req.params; // Appointment ID from the URL
+    await Appointment.delete(id);
+    res.json({ message: 'Appointment deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

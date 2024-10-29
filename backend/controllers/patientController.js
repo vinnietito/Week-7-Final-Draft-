@@ -8,11 +8,38 @@ dotenv.config();
 // Register a new patient
 exports.registerPatient = async (req, res) => {
   try {
-    const { first_name, last_name, email, password } = req.body;
+    const {
+      first_name,
+      last_name,
+      email,
+      password,
+      phone,
+      date_of_birth,
+      gender,
+      address,
+    } = req.body;
+
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Patient.create({ first_name, last_name, email, password: hashedPassword });
+
+    // Create a new patient
+    await Patient.create({
+      first_name,
+      last_name,
+      email,
+      password: hashedPassword,
+      phone,
+      date_of_birth,
+      gender,
+      address,
+    });
+
     res.status(201).json({ message: 'Patient registered successfully' });
   } catch (err) {
+    // Handle unique constraint violation for email
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({ error: 'Email already in use' });
+    }
     res.status(500).json({ error: err.message });
   }
 };
@@ -38,8 +65,18 @@ exports.loginPatient = async (req, res) => {
 exports.updatePatientProfile = async (req, res) => {
   try {
     const { id } = req.user;
-    const { first_name, last_name, phone } = req.body;
-    await Patient.updateProfile(id, { first_name, last_name, phone });
+    const { first_name, last_name, phone, date_of_birth, gender, address } = req.body;
+
+    // Ensure you are using an updated method that allows for all fields to be updated
+    await Patient.update(id, {
+      first_name,
+      last_name,
+      phone,
+      date_of_birth,
+      gender,
+      address,
+    });
+
     res.json({ message: 'Profile updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
