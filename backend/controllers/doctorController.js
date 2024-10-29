@@ -9,23 +9,17 @@ dotenv.config();
 exports.registerDoctor = async (req, res) => {
   try {
     const { first_name, last_name, email, password, phone, specialization } = req.body;
-
-    // Check if the doctor already exists
-    const existingDoctor = await Doctor.findByEmail(email);
-    if (existingDoctor) {
-      return res.status(400).json({ message: 'Doctor already exists' });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Doctor.create({
-      first_name,
-      last_name,
-      email,
-      password: hashedPassword,
-      phone,
-      specialization,
+    
+    await Doctor.create({ 
+      first_name, 
+      last_name, 
+      email, 
+      password: hashedPassword, 
+      phone, 
+      specialization 
     });
-
+    
     res.status(201).json({ message: 'Doctor registered successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -52,10 +46,16 @@ exports.loginDoctor = async (req, res) => {
 // Update a doctor's profile
 exports.updateDoctorProfile = async (req, res) => {
   try {
-    const { id } = req.user; // Assuming you're using a middleware to get the doctor's ID from the token
+    const { id } = req.user; // Get doctor ID from JWT
     const { first_name, last_name, phone, specialization } = req.body;
-
-    await Doctor.update(id, { first_name, last_name, phone, specialization });
+    
+    await Doctor.update(id, { 
+      first_name, 
+      last_name, 
+      phone, 
+      specialization 
+    });
+    
     res.json({ message: 'Profile updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -65,7 +65,7 @@ exports.updateDoctorProfile = async (req, res) => {
 // Delete a doctor account
 exports.deleteDoctor = async (req, res) => {
   try {
-    const { id } = req.user; // Assuming you're using a middleware to get the doctor's ID from the token
+    const { id } = req.user;
     await Doctor.delete(id);
     res.json({ message: 'Doctor account deleted successfully' });
   } catch (err) {

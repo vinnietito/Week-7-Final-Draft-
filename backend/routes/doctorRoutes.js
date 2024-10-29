@@ -1,12 +1,12 @@
 const express = require('express');
-const { addDoctor, getAllDoctors, updateDoctor, deleteDoctor } = require('../controllers/doctorController');
+const { registerDoctor, loginDoctor, updateDoctorProfile, deleteDoctor } = require('../controllers/doctorController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.post('/add', authMiddleware, addDoctor); // Restricted to admin
-router.get('/', getAllDoctors);
-router.put('/:id', authMiddleware, updateDoctor);
-router.delete('/:id', authMiddleware, deleteDoctor);
+router.post('/register', registerDoctor);
+router.post('/login', loginDoctor);
+router.put('/profile', authMiddleware, updateDoctorProfile);
+router.delete('/delete', authMiddleware, deleteDoctor);
 
 module.exports = router;
