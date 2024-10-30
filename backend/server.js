@@ -23,5 +23,10 @@ app.use('/api/patients', patientRoutes);
 app.use('/appointments', appointmentRoutes);
 app.use(authRoutes);
 
+// Set up a catch-all route to send index.html for any route not handled by API
+app.get('*', (req, res) => {
+    res.sendFile(__dirname + '/frontend/index.html');
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
