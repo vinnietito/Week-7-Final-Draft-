@@ -11,6 +11,9 @@ const authRoutes = require('./routes/authRoutes');
 dotenv.config();
 const app = express();
 
+// Serve static files from the public directory
+app.use(express.static('public'));
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
