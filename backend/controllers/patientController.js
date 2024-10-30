@@ -72,9 +72,10 @@ exports.loginPatient = async (req, res) => {
 // Update a patient's profile
 exports.updatePatientProfile = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { id } = req.user; // Get the patient ID from the JWT token
     const { first_name, last_name, phone, date_of_birth, gender, address } = req.body;
-    
+
+    // Ensure you are calling the Patient.update method correctly
     await Patient.update(id, { 
       first_name, 
       last_name, 
@@ -86,9 +87,11 @@ exports.updatePatientProfile = async (req, res) => {
     
     res.json({ message: 'Profile updated successfully' });
   } catch (err) {
+    console.error('Error updating profile:', err); // Log the error for debugging
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Delete a patient account
 exports.deletePatient = async (req, res) => {

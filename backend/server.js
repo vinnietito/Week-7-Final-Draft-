@@ -10,10 +10,12 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 dotenv.config();
 const app = express();
 
+app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/patients', patientRoutes);
 app.use('/doctors', doctorRoutes);
+app.use('/api/patients', patientRoutes);
 app.use('/appointments', appointmentRoutes);
 
 const PORT = process.env.PORT || 5000;
