@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const patientRoutes = require('./routes/patientRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ app.use('/patients', patientRoutes);
 app.use('/doctors', doctorRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/appointments', appointmentRoutes);
+app.use(authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
