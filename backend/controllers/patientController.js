@@ -69,7 +69,6 @@ exports.loginPatient = async (req, res) => {
   }
 };
 
-// Other methods like updatePatientProfile and deletePatient would go here
 // Update a patient's profile
 exports.updatePatientProfile = async (req, res) => {
   try {
