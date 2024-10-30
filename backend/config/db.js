@@ -23,6 +23,5 @@ const query = async (sql, params) => {
 // Export the query function for use in models
 module.exports = {
   query,
+  pool // Export the pool if needed elsewhere
 };
-
-module.exports = pool;
