@@ -25,11 +25,18 @@ async function signup(event) {
 
         const data = await response.json();
 
+        const messageDiv = document.getElementById("message");
+        messageDiv.style.display = "block"; // Show the message div
+
         if (response.ok) {
-            alert(data.message); // Show success message
-            window.location.href = 'login.html'; // Redirect to login page
+            messageDiv.textContent = data.message; // Show success message
+            messageDiv.style.color = "green"; // Change message color to green
+            setTimeout(() => {
+                window.location.href = 'login.html'; // Redirect to login page after a delay
+            }, 2000); // Delay before redirecting
         } else {
-            alert(data.message); // Show error message
+            messageDiv.textContent = data.message; // Show error message
+            messageDiv.style.color = "red"; // Change message color to red
         }
     } catch (error) {
         console.error('Error during signup:', error);
