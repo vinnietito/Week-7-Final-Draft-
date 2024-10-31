@@ -47,7 +47,7 @@
 
 async function signup(event) {
     event.preventDefault();
-
+    
     const formData = {
         first_name: document.getElementById("first_name").value,
         last_name: document.getElementById("last_name").value,
@@ -60,30 +60,36 @@ async function signup(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:5000/signup', {
+        // Send form data to the server
+        const response = await fetch('http://localhost:5000/api/auth/signup', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(formData),
         });
 
         const data = await response.json();
 
         const messageDiv = document.getElementById("message");
-        messageDiv.style.display = "block";
+        messageDiv.style.display = "block"; // Show the message div
 
         if (response.ok) {
-            messageDiv.textContent = data.message || "Registration successful!";
-            messageDiv.style.color = "green";
+            messageDiv.textContent = data.message; // Show success message
+            messageDiv.style.color = "green"; // Success message in green
             setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
+                window.location.href = 'login.html'; // Redirect to login page after delay
+            }, 2000); // 2-second delay
         } else {
-            messageDiv.textContent = data.message || "Registration failed.";
-            messageDiv.style.color = "red";
+            messageDiv.textContent = data.message; // Show error message
+            messageDiv.style.color = "red"; // Error message in red
         }
     } catch (error) {
         console.error('Error during signup:', error);
-        document.getElementById("message").textContent = 'An error occurred during signup.';
+        const messageDiv = document.getElementById("message");
+        messageDiv.style.display = "block";
+        messageDiv.textContent = "An error occurred. Please try again.";
+        messageDiv.style.color = "red";
     }
 }
 
