@@ -42,10 +42,9 @@
         </form>
         <div id="message" style="display:none;"></div> <!-- Message div -->
     </div>
-
     <script>
         document.getElementById("signup-form").addEventListener("submit", signup);
-    
+
         async function signup(event) {
             event.preventDefault();
             
@@ -59,7 +58,7 @@
                 gender: document.getElementById("gender").value,
                 address: document.getElementById("address").value
             };
-    
+
             try {
                 // Send form data to the server
                 const response = await fetch('http://localhost:5000/api/auth/signup', {
@@ -69,30 +68,20 @@
                     },
                     body: JSON.stringify(formData),
                 });
-    
+
                 const data = await response.json();
-                const messageDiv = document.getElementById("message");
-                messageDiv.style.display = "block"; // Show the message div
-    
+
                 if (response.ok) {
-                    messageDiv.textContent = data.message; // Show success message
-                    messageDiv.style.color = "green"; // Success message in green
-                    setTimeout(() => {
-                        window.location.href = 'login.html'; // Redirect to login page after delay
-                    }, 2000); // 2-second delay
+                    alert(data.message); // Show success alert
+                    window.location.href = 'login.html'; // Redirect to login page
                 } else {
-                    messageDiv.textContent = data.message; // Show error message
-                    messageDiv.style.color = "red"; // Error message in red
+                    alert(data.message); // Show error message
                 }
             } catch (error) {
                 console.error('Error during signup:', error);
-                const messageDiv = document.getElementById("message");
-                messageDiv.style.display = "block";
-                messageDiv.textContent = "An error occurred. Please try again.";
-                messageDiv.style.color = "red";
+                alert("An error occurred. Please try again."); // Alert on error
             }
         }
     </script>
-    
 </body>
 </html>
