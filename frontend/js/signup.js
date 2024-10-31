@@ -1,30 +1,25 @@
-document.getElementById("signup-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("password").value;
 
-    try {
-        const response = await fetch("http://localhost:5000/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, email, phone, password })
+        // Optional: You can add client-side validation or AJAX form submission here
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('http://localhost:5000/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Signup successful!');
+                // You can redirect the user or perform other actions here
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Signup failed. Please try again.');
+            });
         });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            alert("Registration successful! You can now log in.");
-            window.location.href = "login.html"; // Redirect to login
-        } else {
-            alert(data.message); // Show error message
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Signup failed. Please try again.");
-    }
-});
