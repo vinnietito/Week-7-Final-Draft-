@@ -45,12 +45,10 @@
 
     <script>
         document.getElementById("signup-form").addEventListener("submit", signup);
-
+    
         async function signup(event) {
             event.preventDefault();
-
-            console.log("Signup function called"); // Debugging check
-
+            
             const formData = {
                 first_name: document.getElementById("first_name").value,
                 last_name: document.getElementById("last_name").value,
@@ -61,10 +59,9 @@
                 gender: document.getElementById("gender").value,
                 address: document.getElementById("address").value
             };
-
-            console.log("Form data prepared:", formData); // Debugging check
-
+    
             try {
+                // Send form data to the server
                 const response = await fetch('http://localhost:5000/api/auth/signup', {
                     method: 'POST',
                     headers: {
@@ -72,14 +69,11 @@
                     },
                     body: JSON.stringify(formData),
                 });
-
-                console.log("Response received:", response); // Debugging check
-
+    
                 const data = await response.json();
-
                 const messageDiv = document.getElementById("message");
                 messageDiv.style.display = "block"; // Show the message div
-
+    
                 if (response.ok) {
                     messageDiv.textContent = data.message; // Show success message
                     messageDiv.style.color = "green"; // Success message in green
@@ -87,7 +81,7 @@
                         window.location.href = 'login.html'; // Redirect to login page after delay
                     }, 2000); // 2-second delay
                 } else {
-                    messageDiv.textContent = data.message || "Error during signup."; // Show error message
+                    messageDiv.textContent = data.message; // Show error message
                     messageDiv.style.color = "red"; // Error message in red
                 }
             } catch (error) {
@@ -99,5 +93,6 @@
             }
         }
     </script>
+    
 </body>
 </html>
