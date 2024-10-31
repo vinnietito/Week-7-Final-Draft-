@@ -42,27 +42,20 @@ router.post('/login', (req, res) => {
     db.query(sql, [email], async (error, results) => {
         if (error) {
             console.error("Database query error:", error);
-            return res.status(500).json({ message: "Login failed due to a server error." });
+            return res.status(500).json({ message: "Login failed" });
         }
-
+        
         if (results.length > 0) {
             const user = results[0];
-            try {
-                // Compare entered password with stored hashed password
-                const isPasswordMatch = await bcrypt.compare(password, user.password);
-                if (isPasswordMatch) {
-                    return res.status(200).json({ message: 'Login successful!', token: 'mock-token' });
-                } else {
-                    return res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
-                }
-            } catch (compareError) {
-                console.error("Password comparison error:", compareError);
-                return res.status(500).json({ message: "An error occurred during login. Please try again." });
+            // Compare entered password with stored hashed password
+            const isPasswordMatch = await bcrypt.compare(password, user.password);
+            if (isPasswordMatch) {
+                return res.status(200).json({ message: 'Login successful!', token: 'mock-token' });
             }
-        } else {
-            return res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
         }
+        res.status(401).json({ message: 'Invalid credentials' });
     });
 });
+
 
 module.exports = router;
