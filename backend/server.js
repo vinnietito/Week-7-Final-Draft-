@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+require('dotenv').config();
 
 const patientRoutes = require('./routes/patientRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
@@ -23,6 +24,7 @@ app.use('/doctors', doctorRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/appointments', appointmentRoutes);
 app.use(authRoutes);
+app.use('/api/auth', authRoutes);
 
 // Define a route for the root URL to serve index.html
 app.get('/', (req, res) => {
