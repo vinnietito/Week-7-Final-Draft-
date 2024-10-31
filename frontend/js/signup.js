@@ -1,27 +1,37 @@
-document.getElementById("signup-form").addEventListener("submit", async function (event) {
+async function signup(event) {
     event.preventDefault();
-
-    // Gather form data
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
+    
+    const formData = {
+        first_name: document.getElementById("first_name").value,
+        last_name: document.getElementById("last_name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        phone: document.getElementById("phone").value,
+        date_of_birth: document.getElementById("date_of_birth").value,
+        gender: document.getElementById("gender").value,
+        address: document.getElementById("address").value
+    };
 
     try {
-        // Send POST request to the server
-        const response = await fetch("http://localhost:5000/signup", {
-            method: "POST",
+        const response = await fetch('http://localhost:5000/signup', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(formData),
         });
 
-        // Parse the JSON response
-        const result = await response.json();
+        const data = await response.json();
 
-        // Display success message
-        alert(result.message); // Shows "User registered successfully!" in an alert
+        if (response.ok) {
+            alert(data.message); // Show success message
+            // Redirect to login page
+            window.location.href = 'login.html'; // Adjust to your actual login page path
+        } else {
+            alert(data.message); // Show error message
+        }
     } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred while registering. Please try again.");
+        console.error('Error during signup:', error);
+        alert('An error occurred during signup.');
     }
-});
+}
