@@ -1,31 +1,46 @@
-<!-- signup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS -->
+    <link rel="stylesheet" href="styles.css"> <!-- Optional CSS file for styling -->
 </head>
 <body>
     <div class="container">
         <h2>Signup</h2>
-        <form id="signupForm" onsubmit="signup(event)">
-            <input type="text" id="first_name" placeholder="First Name" required>
-            <input type="text" id="last_name" placeholder="Last Name" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <input type="text" id="phone" placeholder="Phone" required>
+        <form id="signup-form">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" required>
+            
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" required>
+            
+            <label for="date_of_birth">Date of Birth:</label>
             <input type="date" id="date_of_birth" required>
+            
+            <label for="gender">Gender:</label>
             <select id="gender" required>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
             </select>
-            <input type="text" id="address" placeholder="Address" required>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" required>
+            
             <button type="submit">Register</button>
         </form>
     </div>
-    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+    <script src="js/signup.js"></script> <!-- Include your JavaScript file -->
 </body>
 </html>

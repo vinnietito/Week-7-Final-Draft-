@@ -1,3 +1,5 @@
+document.getElementById("signup-form").addEventListener("submit", signup);
+
 async function signup(event) {
     event.preventDefault();
     
@@ -25,8 +27,7 @@ async function signup(event) {
 
         if (response.ok) {
             alert(data.message); // Show success message
-            // Redirect to login page
-            window.location.href = 'login.html'; // Adjust to your actual login page path
+            window.location.href = 'login.html'; // Redirect to login page
         } else {
             alert(data.message); // Show error message
         }
