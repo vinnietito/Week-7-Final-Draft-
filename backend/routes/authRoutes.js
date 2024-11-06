@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken'); // For generating tokens
 const dotenv = require('dotenv');
 
 dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Make sure to set a JWT_SECRET in your .env file
+const JWT_SECRET = process.env.JWT_SECRET || 'qwertyuiopoiuytrewqwertyuiop'; // Make sure to set a JWT_SECRET in your .env file
 
 // Signup route
 router.post('/signup', async (req, res) => {
@@ -38,6 +38,7 @@ router.post('/signup', async (req, res) => {
         res.status(500).json({ message: "An error occurred during registration. Please try again later." });
     }
 });
+
 
 // Login route
 router.post('/login', (req, res) => {
