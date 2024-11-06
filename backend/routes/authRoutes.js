@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db'); // Adjust the path to your database connection
 const bcrypt = require('bcrypt'); // For hashing passwords
+const jwt = require('jsonwebtoken'); // For generating tokens
+const dotenv = require('dotenv');
+
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Make sure to set a JWT_SECRET in your .env file
 
 // Signup route
 router.post('/signup', async (req, res) => {
@@ -42,20 +47,22 @@ router.post('/login', (req, res) => {
     db.query(sql, [email], async (error, results) => {
         if (error) {
             console.error("Database query error:", error);
-            return res.status(500).json({ message: "Login failed" });
+            return res.status(500).json({ message: "An error occurred. Please try again." });
         }
         
         if (results.length > 0) {
             const user = results[0];
-            // Compare entered password with stored hashed password
             const isPasswordMatch = await bcrypt.compare(password, user.password);
+
             if (isPasswordMatch) {
-                return res.status(200).json({ message: 'Login successful!', token: 'mock-token' });
+                // Generate JWT token
+                const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+                return res.status(200).json({ message: 'Login successful!', token });
             }
         }
-        res.status(401).json({ message: 'Invalid credentials' });
+        
+        res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
     });
 });
-
 
 module.exports = router;

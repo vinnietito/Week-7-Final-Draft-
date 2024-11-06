@@ -1,7 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const path = require('path');
 dotenv.config();
 
@@ -13,9 +12,8 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable CORS
-app.use(express.json()); // Parse JSON
-app.use(bodyParser.json());
+app.use(cors()); // Enable CORS for cross-origin requests
+app.use(express.json()); // Parse JSON requests
 
 // Serve static files from the "frontend" directory
 app.use(express.static(path.join(__dirname, '../frontend')));
@@ -24,26 +22,22 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/patients', patientRoutes);
 app.use('/doctors', doctorRoutes);
 app.use('/appointments', appointmentRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes); // Authentication routes (signup/login)
 
 // Serve index.html for the root URL
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
 
-// Sample route for signup in authRoutes.js
-app.post('/api/auth/signup', async (req, res) => {
-    try {
-        // Here you would have the logic to register a new patient
-        // E.g., save to database and return a success message
-        const newPatient = req.body; // Simulating patient save logic
+// Error Handling for Unknown Routes
+app.use((req, res, next) => {
+    res.status(404).json({ message: "Route not found" });
+});
 
-        // Simulate successful registration response
-        res.status(201).json({ message: "Registration successful!" });
-    } catch (error) {
-        console.error('Error during registration:', error);
-        res.status(500).json({ message: "Registration failed. Please try again." });
-    }
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "An internal error occurred." });
 });
 
 // Start server
