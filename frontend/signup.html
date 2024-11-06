@@ -50,46 +50,38 @@
     </div>
 
     <script>
-        document.getElementById("signup-form").addEventListener("submit", signup);
-
-        async function signup(event) {
+        document.getElementById("signup-form").addEventListener("submit", async (event) => {
             event.preventDefault();
             
-            const formData = {
-                first_name: document.getElementById("first_name").value,
-                last_name: document.getElementById("last_name").value,
-                email: document.getElementById("email").value,
-                password: document.getElementById("password").value,
-                phone: document.getElementById("phone").value,
-                date_of_birth: document.getElementById("date_of_birth").value,
-                gender: document.getElementById("gender").value,
-                address: document.getElementById("address").value
-            };
-
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+    
             try {
-                // Send form data to the server
                 const response = await fetch('http://localhost:5000/api/auth/signup', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
-
-                const data = await response.json();
-
+                
+                const result = await response.json();
                 if (response.ok) {
-                    alert(data.message); // Show success alert
-                    // Redirect to login page with a success query parameter
-                    window.location.href = 'login.html?signup=success';
+                    // Show success message
+                    document.getElementById("message").textContent = result.message;
+                    document.getElementById("message").style.color = "green";
+                    // Redirect to login page
+                    setTimeout(() => {
+                        window.location.href = "login.html"; // Redirect after 2 seconds
+                    }, 2000);
                 } else {
-                    alert(data.message); // Show error message
+                    // Show error message
+                    document.getElementById("message").textContent = result.message;
+                    document.getElementById("message").style.color = "red";
                 }
             } catch (error) {
-                console.error('Error during signup:', error);
-                alert("An error occurred. Please try again."); // Alert on error
+                document.getElementById("message").textContent = "An error occurred. Please try again.";
+                document.getElementById("message").style.color = "red";
             }
-        }
+        });
     </script>
 </body>
 </html>
