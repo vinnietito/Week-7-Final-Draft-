@@ -18,8 +18,14 @@
             
             <button type="submit">Login</button>
         </form>
+
+        <!-- New "Sign up" link for users without an account -->
+        <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+
         <div id="message" style="display:none;"></div> <!-- Message div -->
     </div>
+
+    <!-- JavaScript code for handling form submission and login logic -->
     <script>
         document.getElementById("login-form").addEventListener("submit", login);
 
@@ -44,18 +50,10 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Successful login
                     alert(data.message); // Show success message
-                    window.location.href = 'dashboard.html'; // Redirect to dashboard or intended page
+                    window.location.href = 'dashboard.html'; // Redirect to dashboard
                 } else {
-                    if (data.message === "User not found") {
-                        // Redirect to signup page if the user doesn't have an account
-                        alert("User not found. Redirecting to signup.");
-                        window.location.href = 'signup.html';
-                    } else {
-                        // Show other error messages
-                        alert(data.message);
-                    }
+                    alert(data.message); // Show error message
                 }
             } catch (error) {
                 console.error('Error during login:', error);
