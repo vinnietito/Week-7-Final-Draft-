@@ -3,43 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Signup</title>
     <link rel="stylesheet" href="styles.css"> <!-- Optional CSS file for styling -->
 </head>
 <body>
     <div class="container">
-        <h2>Login</h2>
-        <form id="login-form">
+        <h2>Signup</h2>
+        
+        <!-- Signup Form -->
+        <form id="signup-form">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" required>
+            
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" required>
+            
             <label for="email">Email:</label>
             <input type="email" id="email" required>
             
             <label for="password">Password:</label>
             <input type="password" id="password" required>
             
-            <button type="submit">Login</button>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" required>
+            
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" id="date_of_birth" required>
+            
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" required>
+            
+            <button type="submit">Register</button>
         </form>
 
-        <!-- New "Sign up" link for users without an account -->
-        <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
-
+        <!-- Login link for existing users -->
+        <p>Already have an account? <a href="login.html">Log in here</a></p>
+        
         <div id="message" style="display:none;"></div> <!-- Message div -->
     </div>
 
-    <!-- JavaScript code for handling form submission and login logic -->
     <script>
-        document.getElementById("login-form").addEventListener("submit", login);
+        document.getElementById("signup-form").addEventListener("submit", signup);
 
-        async function login(event) {
+        async function signup(event) {
             event.preventDefault();
-
+            
             const formData = {
+                first_name: document.getElementById("first_name").value,
+                last_name: document.getElementById("last_name").value,
                 email: document.getElementById("email").value,
-                password: document.getElementById("password").value
+                password: document.getElementById("password").value,
+                phone: document.getElementById("phone").value,
+                date_of_birth: document.getElementById("date_of_birth").value,
+                gender: document.getElementById("gender").value,
+                address: document.getElementById("address").value
             };
 
             try {
-                // Send login data to the server
-                const response = await fetch('http://localhost:5000/api/auth/login', {
+                // Send form data to the server
+                const response = await fetch('http://localhost:5000/api/auth/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -50,13 +79,14 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert(data.message); // Show success message
-                    window.location.href = 'dashboard.html'; // Redirect to dashboard
+                    alert(data.message); // Show success alert
+                    // Redirect to login page with a success query parameter
+                    window.location.href = 'login.html?signup=success';
                 } else {
                     alert(data.message); // Show error message
                 }
             } catch (error) {
-                console.error('Error during login:', error);
+                console.error('Error during signup:', error);
                 alert("An error occurred. Please try again."); // Alert on error
             }
         }
