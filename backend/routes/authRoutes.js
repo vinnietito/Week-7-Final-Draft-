@@ -48,21 +48,24 @@ router.post('/login', (req, res) => {
     db.query(sql, [email], async (error, results) => {
         if (error) {
             console.error("Database query error:", error);
-            return res.status(500).json({ message: "An error occurred. Please try again." });
+            return res.status(500).json({ message: "Login failed. Please try again." });
         }
         
         if (results.length > 0) {
             const user = results[0];
+            // Compare entered password with stored hashed password
             const isPasswordMatch = await bcrypt.compare(password, user.password);
-
             if (isPasswordMatch) {
                 // Generate JWT token
-                const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
-                return res.status(200).json({ message: 'Login successful!', token });
+                const token = jwt.sign(
+                    { id: user.id, email: user.email }, // Payload
+                    process.env.JWT_SECRET, // Secret key
+                    { expiresIn: '1h' } // Token expiration (1 hour)
+                );
+                return res.status(200).json({ message: 'Login successful!', token: token });
             }
         }
-        
-        res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
+        res.status(401).json({ message: 'Invalid credentials' });
     });
 });
 
