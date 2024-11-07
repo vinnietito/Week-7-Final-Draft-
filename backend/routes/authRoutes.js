@@ -43,6 +43,7 @@ router.post('/signup', async (req, res) => {
 // Login route
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
+    console.log("Login attempt:", email);  // Log the email being used to log in
 
     const sql = `SELECT * FROM patients WHERE email = ?`;
     db.query(sql, [email], async (error, results) => {
@@ -51,22 +52,27 @@ router.post('/login', (req, res) => {
             return res.status(500).json({ message: "Login failed. Please try again." });
         }
         
+        console.log("Results:", results);  // Log the results from the database query
+
         if (results.length > 0) {
             const user = results[0];
             // Compare entered password with stored hashed password
             const isPasswordMatch = await bcrypt.compare(password, user.password);
+            console.log("Password match:", isPasswordMatch);  // Log password comparison result
+
             if (isPasswordMatch) {
-                // Generate JWT token
                 const token = jwt.sign(
-                    { id: user.id, email: user.email }, // Payload
-                    process.env.JWT_SECRET, // Secret key
-                    { expiresIn: '1h' } // Token expiration (1 hour)
+                    { id: user.id, email: user.email },
+                    process.env.JWT_SECRET,
+                    { expiresIn: '1h' }
                 );
+                console.log("JWT Token generated:", token);  // Log the generated JWT token
                 return res.status(200).json({ message: 'Login successful!', token: token });
             }
         }
         res.status(401).json({ message: 'Invalid credentials' });
     });
 });
+
 
 module.exports = router;
